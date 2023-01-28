@@ -114,3 +114,8 @@ export const State =
   z.object({
     control: UnitOnlyEnum,
   })
+
+export const Order =
+  z.object({
+    created: z.date(),
+  })

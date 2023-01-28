@@ -1,5 +1,7 @@
 mod real;
 
+use chrono::{DateTime, Utc};
+
 use crate::real::{AllowReason, BlockingState, DetectedRequest};
 use std::fs;
 
@@ -20,8 +22,9 @@ fn main() {
         MixedEnum::codegen(),
         UnitOnlyEnum::codegen(),
         State::codegen(),
+        Order::codegen(),
     ];
-    fs::write("./app/types.ts", lines.join("\n")).expect("can write");
+    fs::write("./example/types.ts", lines.join("\n")).expect("can write");
 }
 
 #[serde_zod::codegen]
@@ -200,5 +203,21 @@ fn test_count_2() {
       }),
     }),
   ])"#;
+    assert_eq!(actual, expected);
+}
+
+#[serde_zod::codegen]
+#[derive(serde::Serialize)]
+pub struct Order {
+    created: DateTime<Utc>,
+}
+
+#[test]
+fn test_date_time() {
+    let actual = Order::codegen();
+    let expected = r#"export const Order =
+  z.object({
+    created: z.date(),
+  })"#;
     assert_eq!(actual, expected);
 }

@@ -229,13 +229,16 @@ fn as_ty(ty: &Type) -> Result<Ty, String> {
                         let first_arg = o.args.first();
 
                         match (ident.as_str(), first_arg) {
-                            ("Vec" | "Option", Some(arg1)) => {
+                            ("Vec" | "Option" | "DateTime", Some(arg1)) => {
                                 if let Ok(inner) = ty_from_generic_argument(arg1) {
                                     if ident == "Vec" {
                                         return Ok(Ty::seq(inner));
                                     }
                                     if ident == "Option" {
                                         return Ok(Ty::optional(inner));
+                                    }
+                                    if ident == "DateTime" {
+                                        return Ok(Ty::ZodDate);
                                     }
                                 }
                             }
